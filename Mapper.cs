@@ -87,6 +87,11 @@ namespace Picorm.Common
         public int Delete<Entity>(Entity e) where Entity : class
         {
             var mapper = GetMapper<Entity>();
+            List<QueryParameter> deleteParameters = mapper.GetParameters(e, FieldDirection.Key).ToList();
+            if(deleteParameters.Count == 0)
+            {
+                throw new InvalidQueryException("Can't delete an entity without primary key.");
+            }
             return DBInterface.Delete(
                     mapper.EntityName,
                     mapper.GetParameters(e, FieldDirection.Key)
@@ -95,17 +100,20 @@ namespace Picorm.Common
 
         public int DeleteWhere<Entity>(Entity e) where Entity : class
         {
-            return DBInterface.Delete(
-                    GetMapper<Entity>().EntityName,
-                    GetMapper<Entity>().GetParameters(e, FieldDirection.Write)
-                );
+            return DeleteWhere<Entity, Entity>(e);
         }
 
         public int DeleteWhere<Entity, Filter>(Filter f) where Entity : class where Filter : class
         {
+            var mapper = GetMapper<Filter>();
+            List<QueryParameter> deleteParameters = mapper.GetParameters(f, FieldDirection.Key).ToList();
+            if (deleteParameters.Count == 0)
+            {
+                throw new InvalidQueryException("Can't perform a parameterless delete.");
+            }
             return DBInterface.Delete(
                     GetMapper<Entity>().EntityName,
-                    GetMapper<Filter>().GetParameters(f, FieldDirection.Write)
+                    mapper.GetParameters(f, FieldDirection.Write)
                 );
         }
     }
