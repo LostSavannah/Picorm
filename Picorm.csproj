@@ -1,10 +1,36 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <Authors>erickfernandomoraramirez@outlook.com</Authors>
     <Description>Simple Experimental Object Relational Mapper.</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/codeRookieErick/Picorm.git</RepositoryUrl>
+    <PackageTags>small orm</PackageTags>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+	<AssemblyVersion>1.0.1</AssemblyVersion>
+	<FileVersion>1.0.1</FileVersion>
+	<Version>1.0.1</Version>	
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Update="readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+	
+	<ItemGroup>
+		<None Include="LICENSE" Pack="true" PackagePath=""/>
+	</ItemGroup>
+		
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <Deterministic>False</Deterministic>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <Deterministic>False</Deterministic>
+	</PropertyGroup>
 </Project>

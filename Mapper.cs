@@ -8,11 +8,13 @@ using Picorm.Enums;
 
 namespace Picorm.Common
 {
-    public class Mapper
+    public class Mapper : IMapper
     {
+        int test = 0;
         static readonly List<object> cache = new List<object>();
         public Mapper(IDBInterface dBInterface)
         {
+            test *= 2;
             DBInterface = dBInterface;
         }
         public IDBInterface DBInterface { get; }
