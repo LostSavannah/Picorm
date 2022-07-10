@@ -13,7 +13,6 @@ namespace Picorm.Common
         static readonly List<object> cache = new List<object>();
         public Mapper(IDBInterface dBInterface)
         {
-            test *= 2;
             DBInterface = dBInterface;
         }
         public IDBInterface DBInterface { get; }
