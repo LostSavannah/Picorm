@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <Authors>erickfernandomoraramirez@outlook.com</Authors>
+    <Description>Simple Experimental Object Relational Mapper.</Description>
+  </PropertyGroup>
+
+</Project>
