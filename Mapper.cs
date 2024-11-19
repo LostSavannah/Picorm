@@ -11,20 +11,22 @@ namespace Picorm.Common
     public class Mapper : IMapper
     {
         static readonly List<object> cache = new List<object>();
-        public Mapper(IDBInterface dBInterface)
+        public Mapper(IDBInterface dBInterface, IEntityMapperFactory entityMapperFactory)
         {
             DBInterface = dBInterface;
+            EntityMapperFactory = entityMapperFactory;
         }
         public IDBInterface DBInterface { get; }
+        public IEntityMapperFactory EntityMapperFactory { get; }
 
-        public StandardMapper<Result> GetMapper<Result>() where Result : class
+        public IEntityMapper<Result> GetMapper<Result>() where Result : class
         {
             lock (cache)
             {
-                StandardMapper<Result>? mapper = cache.FirstOrDefault(c => c is StandardMapper<Result>) as StandardMapper<Result>;
+                var mapper = cache.FirstOrDefault(c => c is IEntityMapper<Result>) as IEntityMapper<Result>;
                 if (mapper == null)
                 {
-                    mapper = new StandardMapper<Result>();
+                    mapper = EntityMapperFactory.Create<Result>();
                     cache.Add(mapper);
                 }
                 return mapper;
@@ -33,7 +35,7 @@ namespace Picorm.Common
 
         public IEnumerable<Result> GetAll<Result>(Func<Result> ctor) where Result : class
         {
-            StandardMapper<Result> mapper = GetMapper<Result>();
+            var mapper = GetMapper<Result>();
             using IDataReader reader = DBInterface.SelectAll(mapper.EntityName);
             foreach (Result result in mapper.Map(reader, ctor))
             {
@@ -43,8 +45,8 @@ namespace Picorm.Common
 
         public IEnumerable<Result> GetWhere<Result, Parameter>(Func<Result> ctor, Parameter parameter) where Result : class where Parameter : class
         {
-            StandardMapper<Result> mapper = GetMapper<Result>();
-            StandardMapper<Parameter> parameterMapper = GetMapper<Parameter>();
+            var mapper = GetMapper<Result>();
+            var parameterMapper = GetMapper<Parameter>();
             using IDataReader reader = DBInterface.SelectWhere(
                 mapper.EntityName,
                 parameterMapper.GetParameters(parameter)

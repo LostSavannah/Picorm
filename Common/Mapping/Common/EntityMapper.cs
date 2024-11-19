@@ -4,14 +4,18 @@ using System.Linq;
 using System.Collections.Generic;
 using Picorm.Enums;
 using Picorm.Common.Data;
+using Picorm.Attributes;
+using System.Reflection;
 
-namespace Picorm.Common.Mapping
+namespace Picorm.Common.Mapping.Common
 {
-    public class StandardMapper<T> : BaseMapper<T> where T : class
+    public class EntityMapper<T> : BaseMapper<T>, IEntityMapper<T> where T : class
     {
-        public StandardMapper()
-        {
+        public string EntityName { get; private set; }
 
+        public EntityMapper()
+        {
+            EntityName = typeof(T).GetCustomAttribute<Entity>()?.Name ?? string.Empty;
         }
 
         public T Fill(DataRow row, Func<T> ctor)
@@ -59,7 +63,7 @@ namespace Picorm.Common.Mapping
             foreach (var field in GetFieldsWithDirection(fieldDirection))
             {
                 object? value = field.Getter(entity);
-                if (value != null || (field.Field.WritesDefaults && !field.Field.IsKey))
+                if (value != null || field.Field.WritesDefaults && !field.Field.IsKey)
                 {
                     yield return new QueryParameter(field.Field.Name, value);
                 }

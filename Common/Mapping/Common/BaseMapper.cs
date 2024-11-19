@@ -5,19 +5,12 @@ using System.Reflection;
 using Picorm.Attributes;
 using Picorm.Enums;
 
-namespace Picorm.Common.Mapping
+namespace Picorm.Common.Mapping.Common
 {
     public class BaseMapper<T> where T : class
     {
         private Dictionary<FieldDirection, ICollection<FieldBridge>> cache
             = new Dictionary<FieldDirection, ICollection<FieldBridge>>();
-
-        public BaseMapper()
-        {
-            EntityName = typeof(T).GetCustomAttribute<Entity>()?.Name ?? string.Empty;
-        }
-
-        public string EntityName { get; private set; }
 
         protected ICollection<FieldBridge> GetFieldsWhere(Func<Field, bool> filter)
         {

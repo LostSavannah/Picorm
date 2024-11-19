@@ -15,7 +15,7 @@ namespace Picorm.Common
             where Filter : class;
         int DeleteWhere<Entity>(Entity e) where Entity : class;
         IEnumerable<Result> GetAll<Result>(Func<Result> ctor) where Result : class;
-        StandardMapper<Result> GetMapper<Result>() where Result : class;
+        IEntityMapper<Result> GetMapper<Result>() where Result : class;
         IEnumerable<Result> GetWhere<Result, Parameter>(Func<Result> ctor, Parameter parameter)
             where Result : class
             where Parameter : class;
